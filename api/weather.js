@@ -15,14 +15,6 @@ const options = {
   },
 }
 
-axios(options)
-  .then((response) => {
-    console.log("AX", response.data)
-  })
-  .catch((error) => {
-    console.log("AXERR", error)
-  })
-
 function fetchAndSaveWeather() {
   //   request(options, function (error, response, body) {
   //     if (error) {
@@ -65,7 +57,15 @@ if (!havesWeather) {
 router.get("/", async (req, res) => {
   try {
     // res.sendFile("image.png", { root: "./" })
-    res.send("Hello World!")
+
+    axios(options)
+      .then((response) => {
+        console.log("AX", response.data)
+        res.json(response.data)
+      })
+      .catch((error) => {
+        console.log("AXERR", error)
+      })
   } catch (error) {
     console.error(error)
     return res.status(500).send("Server error")
