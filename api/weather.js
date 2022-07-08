@@ -15,41 +15,6 @@ const options = {
   },
 }
 
-function fetchAndSaveWeather() {
-  //   request(options, function (error, response, body) {
-  //     if (error) {
-  //       console.log("Caught", error)
-  //     }
-  //     const data = JSON.parse(body)
-  //     const fnt = PImage.registerFont("./Menlo.ttf", "Menlo")
-  //     fnt.load(() => {
-  //       const img = PImage.make(450, 50)
-  //       const ctx = img.getContext("2d")
-  //       ctx.imageSmoothingEnabled = true
-  //       ctx.fillStyle = "#000"
-  //       ctx.font = "16pt"
-  //       ctx.fillText(`Currently, ${data.weather[0].description}.`, 5, 40)
-  //       ctx.fillText(
-  //         `Today, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
-  //         5,
-  //         20
-  //       )
-  //       PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
-  //         .then(() => {
-  //           console.log("Weather snapshot saved.")
-  //           havesWeather = true
-  //         })
-  //         .catch((e) => {
-  //           console.log("There was an error writing file.")
-  //         })
-  //     })
-  //   })
-}
-
-if (!havesWeather) {
-  //   fetchAndSaveWeather()
-}
-
 // schedule.scheduleJob("0 0 * * * *", function () {
 //   fetchAndSaveWeather()
 // })
@@ -60,11 +25,33 @@ router.get("/", async (req, res) => {
 
     axios(options)
       .then((response) => {
-        console.log("AX", response.data)
-        res.json(response.data)
+        const { data } = response
+        const fnt = PImage.registerFont("./Menlo.ttf", "Menlo")
+        fnt.load(() => {
+          const img = PImage.make(450, 50)
+          const ctx = img.getContext("2d")
+          ctx.imageSmoothingEnabled = true
+          ctx.fillStyle = "#000"
+          ctx.font = "16pt"
+          ctx.fillText(`Currently, ${data.weather[0].description}.`, 5, 40)
+          ctx.fillText(
+            `Today, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
+            5,
+            20
+          )
+          PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
+            .then(() => {
+              console.log("Weather snapshot saved.")
+              havesWeather = true
+              res.sendFile("image.png", { root: "./" })
+            })
+            .catch((e) => {
+              console.log("There was an error writing file.")
+            })
+        })
       })
       .catch((error) => {
-        console.log("AXERR", error)
+        console.log("Error", error)
       })
   } catch (error) {
     console.error(error)
