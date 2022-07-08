@@ -16,6 +16,8 @@ const options = {
   },
 }
 
+const promise = axios(options)
+
 // schedule.scheduleJob("0 0 * * * *", function () {
 //   fetchAndSaveWeather()
 // })
@@ -24,7 +26,7 @@ router.get("/", async (req, res) => {
   try {
     // res.sendFile("image.png", { root: "./" })
 
-    axios(options)
+    promise
       .then((response) => {
         const { data } = response
         const file = path.join(process.cwd(), "/", "Menlo.ttf")
