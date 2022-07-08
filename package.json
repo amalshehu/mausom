@@ -20,8 +20,6 @@
   "dependencies": {
     "axios": "^0.27.2",
     "express": "^4.18.1",
-    "node-schedule": "^2.1.0",
-    "pureimage": "^0.3.14",
-    "request": "^2.88.2"
+    "pureimage": "^0.3.14"
   }
 }
