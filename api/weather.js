@@ -28,13 +28,14 @@ router.get("/", async (req, res) => {
 function makeWeather(data, res) {
   const img = PImage.make(450, 50)
   const ctx = img.getContext("2d")
-  ctx.fillStyle = "blue"
+  const c = parseFloat(data.main.temp) < 26 ? "#8ac926" : "#ff595e"
+  ctx.fillStyle = c
   ctx.fillRect(0, 0, img.width, img.height)
   ctx.fillStyle = "#000"
   ctx.font = "16pt"
-  ctx.fillText(`Currently, ${data.weather[0].description}.`, 5, 40)
+  ctx.fillText(`Today, ${data.weather[0].description}.`, 5, 40)
   ctx.fillText(
-    `Today, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
+    `Currently, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
     5,
     20
   )
