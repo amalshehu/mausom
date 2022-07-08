@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     axios(options)
       .then((response) => {
         const { data } = response
-        console.log("pwd", process.cwd())
+        console.log("pwd", process.cwd() + "/Menlo.tff")
         const fnt = PImage.registerFont("Menlo.ttf", "Menlo")
         fnt.load(() => {
           const img = PImage.make(450, 50)
