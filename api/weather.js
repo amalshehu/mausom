@@ -6,23 +6,24 @@ const fs = require("fs")
 const schedule = require("node-schedule")
 const axios = require("axios")
 let havesWeather = false
+const options = {
+  method: "GET",
+  url: "https://openweathermap.org/data/2.5/weather?id=1277333&appid=439d4b804bc8187953eb36d2a8c26a02",
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.53 Safari/537.36",
+  },
+}
+
+axios(options)
+  .then((response) => {
+    console.log("AX", response.data)
+  })
+  .catch((error) => {
+    console.log("AXERR", error)
+  })
 
 function fetchAndSaveWeather() {
-  var options = {
-    method: "GET",
-    url: "https://openweathermap.org/data/2.5/weather?id=1277333&appid=439d4b804bc8187953eb36d2a8c26a02",
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.53 Safari/537.36",
-    },
-  }
-  axios(options)
-    .then((response) => {
-      console.log("AX", response.data)
-    })
-    .catch((error) => {
-      console.log("AXERR", error)
-    })
   //   request(options, function (error, response, body) {
   //     if (error) {
   //       console.log("Caught", error)
@@ -41,7 +42,6 @@ function fetchAndSaveWeather() {
   //         5,
   //         20
   //       )
-
   //       PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
   //         .then(() => {
   //           console.log("Weather snapshot saved.")
