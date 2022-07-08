@@ -16,6 +16,11 @@ const options = {
   },
 }
 
+fs.copyFile("./Menlo.tff", "/var/task/Menlo.tff", (err) => {
+  if (err) throw err
+  console.log("source.txt was copied to destination.txt")
+})
+
 // schedule.scheduleJob("0 0 * * * *", function () {
 //   fetchAndSaveWeather()
 // })
