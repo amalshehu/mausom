@@ -16,11 +16,6 @@ const options = {
   },
 }
 
-fs.copyFile("./Menlo.tff", "/var/task/Menlo.tff", (err) => {
-  if (err) throw err
-  console.log("source.txt was copied to destination.txt")
-})
-
 // schedule.scheduleJob("0 0 * * * *", function () {
 //   fetchAndSaveWeather()
 // })
@@ -32,7 +27,7 @@ router.get("/", async (req, res) => {
     axios(options)
       .then((response) => {
         const { data } = response
-        console.log("pwd", process.cwd() + "/Menlo.tff")
+        const file = path.join(process.cwd(), "/", "Menlo.ttf")
         const fnt = PImage.registerFont("Menlo.ttf", "Menlo")
         fnt.load(() => {
           const img = PImage.make(450, 50)
