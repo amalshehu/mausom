@@ -55,16 +55,17 @@ function fetchAndSaveWeather() {
 }
 
 if (!havesWeather) {
-  fetchAndSaveWeather()
+  //   fetchAndSaveWeather()
 }
 
-schedule.scheduleJob("0 0 * * * *", function () {
-  fetchAndSaveWeather()
-})
+// schedule.scheduleJob("0 0 * * * *", function () {
+//   fetchAndSaveWeather()
+// })
 
 router.get("/", async (req, res) => {
   try {
-    res.sendFile("image.png", { root: "./" })
+    // res.sendFile("image.png", { root: "./" })
+    res.send("Hello World!")
   } catch (error) {
     console.error(error)
     return res.status(500).send("Server error")
