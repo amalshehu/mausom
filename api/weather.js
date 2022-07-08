@@ -5,6 +5,7 @@ const PImage = require("pureimage")
 const fs = require("fs")
 const schedule = require("node-schedule")
 const axios = require("axios")
+const path = require("path")
 let havesWeather = false
 const options = {
   method: "GET",
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
       .then((response) => {
         const { data } = response
         console.log("pwd", process.cwd())
-        const fnt = PImage.registerFont(process.cwd() + "/Menlo.ttf", "Menlo")
+        const fnt = PImage.registerFont(path.resolve(__dirname, 'Menlo.ttf', "Menlo")
         fnt.load(() => {
           const img = PImage.make(450, 50)
           const ctx = img.getContext("2d")
