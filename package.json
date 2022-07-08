@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/amalshehu/mausom#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "express": "^4.18.1",
     "node-schedule": "^2.1.0",
     "pureimage": "^0.3.14",

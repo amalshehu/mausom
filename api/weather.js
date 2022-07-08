@@ -4,7 +4,7 @@ const request = require("request")
 const PImage = require("pureimage")
 const fs = require("fs")
 const schedule = require("node-schedule")
-
+const axios = require("axios")
 let havesWeather = false
 
 function fetchAndSaveWeather() {
@@ -16,36 +16,42 @@ function fetchAndSaveWeather() {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.53 Safari/537.36",
     },
   }
-
-  request(options, function (error, response, body) {
-    if (error) {
-      console.log("Caught", error)
-    }
-    const data = JSON.parse(body)
-    const fnt = PImage.registerFont("./Menlo.ttf", "Menlo")
-    fnt.load(() => {
-      const img = PImage.make(450, 50)
-      const ctx = img.getContext("2d")
-      ctx.imageSmoothingEnabled = true
-      ctx.fillStyle = "#000"
-      ctx.font = "16pt"
-      ctx.fillText(`Currently, ${data.weather[0].description}.`, 5, 40)
-      ctx.fillText(
-        `Today, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
-        5,
-        20
-      )
-
-      PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
-        .then(() => {
-          console.log("Weather snapshot saved.")
-          havesWeather = true
-        })
-        .catch((e) => {
-          console.log("There was an error writing file.")
-        })
+  axios(options)
+    .then((response) => {
+      console.log("AX", response.data)
     })
-  })
+    .catch((error) => {
+      console.log("AXERR", error)
+    })
+  //   request(options, function (error, response, body) {
+  //     if (error) {
+  //       console.log("Caught", error)
+  //     }
+  //     const data = JSON.parse(body)
+  //     const fnt = PImage.registerFont("./Menlo.ttf", "Menlo")
+  //     fnt.load(() => {
+  //       const img = PImage.make(450, 50)
+  //       const ctx = img.getContext("2d")
+  //       ctx.imageSmoothingEnabled = true
+  //       ctx.fillStyle = "#000"
+  //       ctx.font = "16pt"
+  //       ctx.fillText(`Currently, ${data.weather[0].description}.`, 5, 40)
+  //       ctx.fillText(
+  //         `Today, ${data.main.temp}°C, ${data.weather[0].main}, ${data.name}`,
+  //         5,
+  //         20
+  //       )
+
+  //       PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
+  //         .then(() => {
+  //           console.log("Weather snapshot saved.")
+  //           havesWeather = true
+  //         })
+  //         .catch((e) => {
+  //           console.log("There was an error writing file.")
+  //         })
+  //     })
+  //   })
 }
 
 if (!havesWeather) {
