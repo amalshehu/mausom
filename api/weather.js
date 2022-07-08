@@ -44,11 +44,11 @@ router.get("/", async (req, res) => {
             20
           )
           PImage.encodePNGToStream(img, fs.createWriteStream("image.png"))
-            .then((res) => {
+            .then(() => {
               console.log("Weather snapshot saved.")
               havesWeather = true
               const file = path.join(process.cwd(), "/", "image.png")
-              res.sendFile(file, { root: "./" })
+              res.sendFile(file)
             })
             .catch((e) => {
               console.log("There was an error writing file.", e)
