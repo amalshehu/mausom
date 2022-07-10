@@ -1,6 +1,6 @@
 {
   "name": "mausom",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,6 @@
     "axios": "^0.27.2",
     "canvas": "^2.9.3",
     "express": "^4.18.1",
-    "pureimage": "^0.3.14"
+    "moment": "^2.29.4"
   }
 }
