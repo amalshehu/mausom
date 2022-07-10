@@ -9,6 +9,6 @@ pnpm start
 
 ## Demo
 
-[https://mausom.vercel.app/api/weather](https://mausom.vercel.app/api/weather)
+[weather/card](https://lucky-badge.herokuapp.com/api/weather/card)
 <br />
-![Weather](https://mausom.vercel.app/api/weather)
+![Weather](https://lucky-badge.herokuapp.com/api/weather/card)
