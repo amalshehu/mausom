@@ -27,15 +27,15 @@ router.get("/image", async (req, res) => {
 })
 
 async function makeWeather(data, res) {
-  const canvas = createCanvas(1200, 250)
+  const canvas = createCanvas(1000, 185)
+  canvas.te
   canvas.shadowColor = "rgba(0, 0, 0, 0.71)"
   canvas.shadowOffsetX = 8
   canvas.shadowOffsetY = 8
   canvas.shadowBlur = 5
 
   const ctx = canvas.getContext("2d")
-  ctx.imageSmoothingEnabled = false
-  ctx.font = '24px "Menlo"'
+  ctx.imageSmoothingEnabled = true
   const c = parseFloat(data.current.temp) < 28 ? "#0077ff" : "#ff9659"
   ctx.fillStyle = c
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -44,27 +44,28 @@ async function makeWeather(data, res) {
   const weatherIcon = await loadImage(
     `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
   )
-  const dt = moment(data.dt).utc("+530").format("MMMM DD hh:mm a")
+  const dt = moment(data.dt).utc("+05:30").format("MMMM DD hh:mm a")
   ctx.fillStyle = "#fff"
-  ctx.font = '42px "Menlo"'
-  ctx.drawImage(weatherIcon, 0, 0, 100, 100)
-  ctx.fillText(`${data.current.temp} °C`, 100, 70)
+  ctx.font = '30px "Menlo"'
+  ctx.drawImage(weatherIcon, 0, -15, 100, 100)
+  ctx.fillText(`${data.current.temp}°C`, 100, 50)
+  ctx.font = '12px "Menlo"'
+  ctx.fillText(dt, 12, 90)
+  ctx.font = '22px "Menlo"'
+  ctx.fillText(`Bengaluru, IN`, 10, 115)
   ctx.font = '16px "Menlo"'
-  ctx.fillText(dt, 12, 110)
-  ctx.font = '36px "Menlo"'
-  ctx.fillText(`Bengaluru, IN`, 10, 145)
-  ctx.font = '24px "Menlo"'
   ctx.fillText(
     `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, ${windType.key}`,
     10,
-    200
+    150
   )
   const desc = windType.desc.slice(7).trim()
-  ctx.font = '16px "Menlo"'
-  ctx.fillText(`${desc}`, 10, 225)
+  ctx.font = '12px "Menlo"'
+  ctx.fillText(desc, 10, 170)
 
   res.writeHead(200, {
     "Content-Type": "image/png",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
   })
   res.end(canvas.toBuffer("image/png"))
 }
