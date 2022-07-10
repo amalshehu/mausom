@@ -1,100 +1,73 @@
-const express = require("express")
-const router = express.Router()
-const PImage = require("pureimage")
-const { registerFont, createCanvas, loadImage } = require("canvas")
-
-const axios = require("axios")
 const path = require("path")
 const fs = require("fs")
-const file = path.join(process.cwd(), "/", "Menlo.ttf")
+const express = require("express")
+const router = express.Router()
+const moment = require("moment")
+const axios = require("axios")
+const { registerFont, createCanvas, loadImage } = require("canvas")
+const wind = require("./util")
 
+const file = path.join(process.cwd(), "/", "Menlo.ttf")
 registerFont(file, { family: "Menlo" })
 const options = {
   method: "GET",
   url: "https://openweathermap.org/data/2.5/onecall?lat=12.9762&lon=77.6033&units=metric&appid=439d4b804bc8187953eb36d2a8c26a02",
 }
-
 const promise = axios(options)
-
-router.get("/", async (req, res) => {
-  try {
-    promise.then((response) => {
-      const { data } = response
-      const fnt = PImage.registerFont(file, "Menlo")
-      fnt.load(() => {
-        makeWeather(data, res)
-      })
-    })
-  } catch (error) {
-    return res.status(500).send("Server error")
-  }
-})
 
 router.get("/image", async (req, res) => {
   try {
     promise.then((response) => {
       const { data } = response
-      makeWeather2(data, res)
+      makeWeather(data, res)
     })
   } catch (error) {
     return res.status(500).send("Server error")
   }
 })
 
-async function makeWeather2(data, res) {
-  const canvas = createCanvas(1200, 800)
-  const ctx = canvas.getContext("2d")
-  ctx.imageSmoothingEnabled = false
-
-  canvas.shadowColor = "rgba(0, 0, 0, 0.5)"
-  canvas.shadowOffsetX = 4
-  canvas.shadowOffsetY = 4
+async function makeWeather(data, res) {
+  const canvas = createCanvas(1200, 250)
+  canvas.shadowColor = "rgba(0, 0, 0, 0.71)"
+  canvas.shadowOffsetX = 8
+  canvas.shadowOffsetY = 8
   canvas.shadowBlur = 5
 
-  ctx.font = '24px "Comic Sans"'
-  const c = parseFloat(data.current.temp) < 24 ? "#269dc9" : "#f7ff59"
+  const ctx = canvas.getContext("2d")
+  ctx.imageSmoothingEnabled = false
+  ctx.font = '24px "Menlo"'
+  const c = parseFloat(data.current.temp) < 28 ? "#0077ff" : "#ff9659"
   ctx.fillStyle = c
   ctx.fillRect(0, 0, canvas.width, canvas.height)
-  ctx.fillStyle = "#000"
-  ctx.fillText(
-    `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, Bangaluru`,
-    10,
-    100
-  )
+  const windType = wind(data.current.wind_speed)
+
   const weatherIcon = await loadImage(
     `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
   )
+  const dt = moment(data.dt).utc("+530").format("MMMM DD hh:mm a")
+  ctx.fillStyle = "#fff"
+  ctx.font = '48px "Menlo"'
   ctx.drawImage(weatherIcon, 0, 0, 100, 100)
-  console.log(weatherIcon)
-  ctx.fillText(`Today, ${data.current.weather[0].description}.`, 10, 200)
-  ctx.fillText(`${Date(data.dt).toString().split("GMT")[0]}`, 10, 300)
-  console.log(Object.keys(data))
-  // ctx.fillText(`${data.alerts[0].event}`, 10, 400)
+  ctx.fillText(`${data.current.temp} °C`, 100, 70)
+  ctx.font = '16px "Menlo"'
+
+  ctx.fillText(dt, 12, 110)
+  ctx.font = '36px "Menlo"'
+  ctx.fillText(`Bengaluru, IN`, 10, 145)
+  ctx.font = '24px "Menlo"'
+  ctx.fillText(
+    `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, ${windType.key}`,
+    10,
+    200
+  )
+  const desc = windType.desc.slice(7).trim()
+  ctx.font = '20px "Menlo"'
+  ctx.fillText(`${desc}`, 10, 225)
+
   res.writeHead(200, {
     "Content-Type": "image/png",
   })
   res.end(canvas.toBuffer("image/png"))
-}
-function makeWeather(data, res) {
-  const img = PImage.make(450, 70)
-  const ctx = img.getContext("2d")
-  const c = parseFloat(data.current.temp) < 24 ? "#269dc9" : "#f7ff59"
-  ctx.fillStyle = c
-  ctx.fillRect(0, 0, img.width, img.height)
-  ctx.fillStyle = "#000"
-  ctx.font = "16pt"
-  ctx.fillText(
-    `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, Bangaluru`,
-    5,
-    20
-  )
-  ctx.fillText(`Today, ${data.current.weather[0].description}.`, 5, 40)
-  ctx.fillText(`${Date(data.dt).toString().split("GMT")[0]}`, 5, 60)
-
-  res.writeHead(200, {
-    "Content-Type": "image/png",
-  })
-  PImage.encodePNGToStream(img, res)
 }
 
 module.exports = router
