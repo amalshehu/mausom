@@ -58,8 +58,8 @@ async function makeWeather(data, res) {
     10,
     150
   )
-  const desc = windType.desc.slice(7).trim()
-  ctx.font = '14px "Menlo"'
+  const desc = windType.desc.trim()
+  ctx.font = '16px "Menlo"'
   ctx.fillText(desc, 10, 170)
 
   res.writeHead(200, {
