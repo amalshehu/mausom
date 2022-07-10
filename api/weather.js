@@ -46,11 +46,10 @@ async function makeWeather(data, res) {
   )
   const dt = moment(data.dt).utc("+530").format("MMMM DD hh:mm a")
   ctx.fillStyle = "#fff"
-  ctx.font = '48px "Menlo"'
+  ctx.font = '42px "Menlo"'
   ctx.drawImage(weatherIcon, 0, 0, 100, 100)
   ctx.fillText(`${data.current.temp} °C`, 100, 70)
   ctx.font = '16px "Menlo"'
-
   ctx.fillText(dt, 12, 110)
   ctx.font = '36px "Menlo"'
   ctx.fillText(`Bengaluru, IN`, 10, 145)
@@ -61,7 +60,7 @@ async function makeWeather(data, res) {
     200
   )
   const desc = windType.desc.slice(7).trim()
-  ctx.font = '20px "Menlo"'
+  ctx.font = '16px "Menlo"'
   ctx.fillText(`${desc}`, 10, 225)
 
   res.writeHead(200, {
