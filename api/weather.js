@@ -64,7 +64,7 @@ async function makeWeather(data, res) {
 
   res.writeHead(200, {
     "Content-Type": "image/png",
-    "Cache-Control": "no-cache",
+    "Cache-Control": "public, max-age=0",
   })
   res.end(canvas.toBuffer("image/png"))
 }
