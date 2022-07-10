@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const PImage = require("pureimage")
-const { registerFont, createCanvas } = require("canvas")
+const { registerFont, createCanvas, loadImage } = require("canvas")
 
 const axios = require("axios")
 const path = require("path")
@@ -41,12 +41,35 @@ router.get("/image", async (req, res) => {
   }
 })
 
-function makeWeather2(data, res) {
-  const canvas = createCanvas(500, 500)
+async function makeWeather2(data, res) {
+  const canvas = createCanvas(1200, 800)
   const ctx = canvas.getContext("2d")
-  ctx.antialias = "subpixel"
-  ctx.font = '48px "Comic Sans"'
-  ctx.fillText("But it works!", 20, 100)
+  ctx.imageSmoothingEnabled = false
+
+  canvas.shadowColor = "rgba(0, 0, 0, 0.5)"
+  canvas.shadowOffsetX = 4
+  canvas.shadowOffsetY = 4
+  canvas.shadowBlur = 5
+
+  ctx.font = '24px "Comic Sans"'
+  const c = parseFloat(data.current.temp) < 24 ? "#269dc9" : "#f7ff59"
+  ctx.fillStyle = c
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = "#000"
+  ctx.fillText(
+    `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, Bangaluru`,
+    10,
+    100
+  )
+  const weatherIcon = await loadImage(
+    `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
+  )
+  ctx.drawImage(weatherIcon, 0, 0, 100, 100)
+  console.log(weatherIcon)
+  ctx.fillText(`Today, ${data.current.weather[0].description}.`, 10, 200)
+  ctx.fillText(`${Date(data.dt).toString().split("GMT")[0]}`, 10, 300)
+  console.log(Object.keys(data))
+  // ctx.fillText(`${data.alerts[0].event}`, 10, 400)
   res.writeHead(200, {
     "Content-Type": "image/png",
   })
