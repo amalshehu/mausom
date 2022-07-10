@@ -43,7 +43,7 @@ async function makeWeather(data, res) {
   const weatherIcon = await loadImage(
     `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
   )
-  const dt = moment(data.dt).utc("+05:30").format("MMMM DD")
+  const dt = moment(data.dt).utc("+05:30").format("MMMM DD hh:mm a")
   ctx.fillStyle = "#fff"
   ctx.font = '30px "Menlo"'
   ctx.drawImage(weatherIcon, 0, -15, 100, 100)
@@ -59,8 +59,8 @@ async function makeWeather(data, res) {
     150
   )
   const desc = windType.desc.slice(7).trim()
-  ctx.font = '12px "Menlo"'
-  ctx.fillText(desc, 12, 170)
+  ctx.font = '14px "Menlo"'
+  ctx.fillText(desc, 10, 170)
 
   res.writeHead(200, {
     "Content-Type": "image/png",
