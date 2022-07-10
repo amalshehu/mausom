@@ -1,4 +1,4 @@
-export const wind = (speed) => {
+const wind = (speed) => {
   const table = {
     Calm: {
       speed_interval: [0, 0.3],
@@ -53,12 +53,17 @@ export const wind = (speed) => {
       desc: "Occurs very rarely. Unusually severe damage.",
     },
   }
-  return table[
-    Object.keys(table).find((key) => {
-      return (
-        speed >= table[key].speed_interval[0] &&
-        speed <= table[key].speed_interval[1]
-      )
-    })
-  ]
+
+  const key = Object.keys(table).find((key) => {
+    return (
+      speed >= table[key].speed_interval[0] &&
+      speed <= table[key].speed_interval[1]
+    )
+  })
+  return {
+    key,
+    desc: table[key].desc,
+  }
 }
+
+module.exports = wind
