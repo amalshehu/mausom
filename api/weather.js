@@ -15,7 +15,7 @@ const options = {
 }
 const promise = axios(options)
 
-router.get("/card", async (req, res) => {
+router.get("/card", (req, res) => {
   try {
     promise.then((response) => {
       const { data } = response
@@ -27,16 +27,32 @@ router.get("/card", async (req, res) => {
 })
 
 async function makeWeather(data, res) {
+  const canvas = makeCanvas()
+  const { windType, ctx } = await createCard(canvas, data)
+  const desc = windType.desc.trim()
+  ctx.font = '16px "Menlo"'
+  ctx.fillText(desc, 10, 170)
+
+  res.writeHead(200, {
+    "Content-Type": "image/png",
+    "Cache-Control": "public, max-age=0",
+  })
+  res.end(canvas.toBuffer("image/png"))
+}
+
+function makeCanvas() {
   const canvas = createCanvas(1000, 185)
   canvas.shadowColor = "rgba(0, 0, 0, 0.71)"
   canvas.shadowOffsetX = 8
   canvas.shadowOffsetY = 8
   canvas.shadowBlur = 5
+  return canvas
+}
 
+async function createCard(canvas, data) {
   const ctx = canvas.getContext("2d")
   ctx.imageSmoothingEnabled = true
-  const c = parseFloat(data.current.temp) < 28 ? "#0E1117" : "#ff9659"
-  ctx.fillStyle = c
+  ctx.fillStyle = "#0E1117"
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   const windType = wind(data.current.wind_speed)
 
@@ -50,23 +66,15 @@ async function makeWeather(data, res) {
   ctx.fillText(`${data.current.temp}°C`, 100, 50)
   ctx.font = '12px "Menlo"'
   ctx.fillText(dt, 12, 90)
-  ctx.font = '22px "Menlo"'
+  ctx.font = '20px "Menlo"'
   ctx.fillText(`Bengaluru, IN`, 10, 115)
-  ctx.font = '16px "Menlo"'
+  ctx.font = '22px "Menlo"'
   ctx.fillText(
     `Feels like, ${data.current.feels_like}°C, ${data.current.weather[0].main}, ${windType.key}`,
     10,
     150
   )
-  const desc = windType.desc.trim()
-  ctx.font = '16px "Menlo"'
-  ctx.fillText(desc, 10, 170)
-
-  res.writeHead(200, {
-    "Content-Type": "image/png",
-    "Cache-Control": "public, max-age=0",
-  })
-  res.end(canvas.toBuffer("image/png"))
+  return { windType, ctx }
 }
 
 module.exports = router

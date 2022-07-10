@@ -14,7 +14,7 @@ const wind = (speed) => {
     },
     "Gentle Breeze": {
       speed_interval: [3.4, 5.5],
-      desc: "Leaves and twigs move. Wind extends light flag and pennants",
+      desc: "Leaves and twigs move. Wind extends light flag and pennants.",
     },
     "Moderate breeze": {
       speed_interval: [5.5, 8],
