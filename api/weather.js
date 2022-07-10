@@ -28,7 +28,6 @@ router.get("/card", async (req, res) => {
 
 async function makeWeather(data, res) {
   const canvas = createCanvas(1000, 185)
-  canvas.te
   canvas.shadowColor = "rgba(0, 0, 0, 0.71)"
   canvas.shadowOffsetX = 8
   canvas.shadowOffsetY = 8
@@ -36,7 +35,7 @@ async function makeWeather(data, res) {
 
   const ctx = canvas.getContext("2d")
   ctx.imageSmoothingEnabled = true
-  const c = parseFloat(data.current.temp) < 28 ? "#0077ff" : "#ff9659"
+  const c = parseFloat(data.current.temp) < 28 ? "#0E1117" : "#ff9659"
   ctx.fillStyle = c
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   const windType = wind(data.current.wind_speed)
@@ -61,7 +60,7 @@ async function makeWeather(data, res) {
   )
   const desc = windType.desc.slice(7).trim()
   ctx.font = '12px "Menlo"'
-  ctx.fillText(desc, 10, 170)
+  ctx.fillText(desc, 12, 170)
 
   res.writeHead(200, {
     "Content-Type": "image/png",
