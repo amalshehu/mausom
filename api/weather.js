@@ -2,7 +2,7 @@ const path = require("path")
 const fs = require("fs")
 const express = require("express")
 const router = express.Router()
-const moment = require("moment")
+const moment = require("moment-timezone")
 const axios = require("axios")
 const { registerFont, createCanvas, loadImage } = require("canvas")
 const wind = require("./util")
@@ -43,7 +43,7 @@ async function makeWeather(data, res) {
   const weatherIcon = await loadImage(
     `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
   )
-  const dt = moment(data.dt).utc(330).format("MMMM DD hh:mm a").unix()
+  const dt = moment(data.dt).tz("Asia/Kolkata").format("MMMM DD hh:mm a")
   ctx.fillStyle = "#fff"
   ctx.font = '30px "Menlo"'
   ctx.drawImage(weatherIcon, 0, -15, 100, 100)
