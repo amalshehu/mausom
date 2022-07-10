@@ -44,7 +44,7 @@ async function makeWeather(data, res) {
   const weatherIcon = await loadImage(
     `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
   )
-  const dt = moment(Date.now()).utc("+05:30").format("MMMM DD hh:mm a")
+  const dt = moment(data.dt).utc("+05:30").format("MMMM DD")
   ctx.fillStyle = "#fff"
   ctx.font = '30px "Menlo"'
   ctx.drawImage(weatherIcon, 0, -15, 100, 100)
@@ -65,7 +65,7 @@ async function makeWeather(data, res) {
 
   res.writeHead(200, {
     "Content-Type": "image/png",
-    "Cache-Control": "no-cache, no-store",
+    "Cache-Control": "no-cache",
   })
   res.end(canvas.toBuffer("image/png"))
 }
