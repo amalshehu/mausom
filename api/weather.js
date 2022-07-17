@@ -81,7 +81,7 @@ function makeAlive() {
   fetch("https://lucky-badge.herokuapp.com/api/weather/card").then((res) => {
     if (res) console.log("ping success")
   })
-  setTimeout(foo, 5000)
+  setTimeout(makeAlive, 5000)
 }
 
 makeAlive()
