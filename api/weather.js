@@ -78,7 +78,7 @@ async function createCard(canvas, data) {
 }
 
 function makeAlive() {
-  fetch("https://lucky-badge.herokuapp.com/api/weather/card").then((res) => {
+  fetch("https://www.wikipedia.org").then((res) => {
     if (res) console.log("ping success")
   })
   setTimeout(makeAlive, 5000)
