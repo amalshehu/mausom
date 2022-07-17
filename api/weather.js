@@ -77,4 +77,13 @@ async function createCard(canvas, data) {
   return { windType, ctx }
 }
 
+function makeAlive() {
+  fetch("https://lucky-badge.herokuapp.com/api/weather/card").then((res) => {
+    if (res) console.log("ping success")
+  })
+  setTimeout(foo, 5000)
+}
+
+makeAlive()
+
 module.exports = router
