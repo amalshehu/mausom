@@ -16,6 +16,8 @@ const options = {
 const promise = axios(options)
 
 router.get("/card", (req, res) => {
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress
+  console.log(`${ip} requested card`)
   try {
     promise.then((response) => {
       const { data } = response
