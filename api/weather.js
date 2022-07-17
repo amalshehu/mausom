@@ -78,7 +78,7 @@ async function createCard(canvas, data) {
 }
 
 function makeAlive() {
-  fetch("https://www.wikipedia.org").then((res) => {
+  axios.get("https://www.wikipedia.org").then((res) => {
     if (res) console.log("ping success")
   })
   setTimeout(makeAlive, 5000)
